@@ -11,3 +11,4 @@ A simple [Telegraf](https://docs.influxdata.com/telegraf/v1.21/) image baked wit
 
 ## Extra Packages
 - [smartmontools](https://www.smartmontools.org/) for use with the [SMART](https://github.com/influxdata/telegraf/blob/master/plugins/inputs/smart/README.md) plugin
+
