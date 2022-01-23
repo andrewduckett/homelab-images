@@ -25,7 +25,6 @@ jobs:
         id: changed
         shell: bash
         run: |
-          git fetch origin main:main
           CHANGED_FILES=$(git diff --name-status origin/main "docker/${{ matrix.IMAGE_NAME }}")
           if [ -z "$CHANGED_FILES" ]
           then
