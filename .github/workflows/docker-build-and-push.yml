@@ -24,9 +24,9 @@ jobs:
       
       - name: Get Changed Files
         uses: marceloprado/has-changed-path@v1
-        id: changed-front
+        id: changed
         with:
-          paths: ${{ matrix.IMAGE_NAME }}/**
+          paths: ${{ matrix.IMAGE_NAME }}
 
       - name: Set up QEMU
         if: steps.changed.outputs.changed == 'true'
