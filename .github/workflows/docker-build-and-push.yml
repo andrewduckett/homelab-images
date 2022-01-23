@@ -25,7 +25,7 @@ jobs:
         id: changed
         shell: bash
         run: |
-          CHANGED_FILES=$(git diff --name-status origin/main -- "docker/${{ matrix.IMAGE_NAME }}")
+          CHANGED_FILES=$(git diff --name-status origin/main -- "${{ matrix.IMAGE_NAME }}")
           if [ -z "$CHANGED_FILES" ]
           then
             echo "No changes in ${{ matrix.IMAGE_NAME }}, terminating."
