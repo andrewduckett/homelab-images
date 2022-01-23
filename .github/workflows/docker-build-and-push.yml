@@ -1,0 +1,62 @@
+name: docker-build-and-push.yml
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        IMAGE_NAME:
+          [
+            "telegraf-with-extras"
+          ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      # determine if the given image needs to be built based on changed files.
+      - name: Changes
+        id: changed
+        shell: bash
+        run: |
+          git fetch origin master:master
+          CHANGED_FILES=$(git diff --name-status origin/master "docker/${{ matrix.IMAGE_NAME }}")
+          if [ -z "$CHANGED_FILES" ]
+          then
+            echo "No changes in ${{ matrix.IMAGE_NAME }}, terminating."
+            echo ::set-output name=status::'terminate'
+          else
+            echo ::set-output name=status::'continue'
+          fi
+
+      - name: Set up QEMU
+        if: steps.changed.outputs.status == 'continue'
+        uses: docker/setup-qemu-action@v1
+      
+      - name: Set up Docker Buildx
+        if: steps.changed.outputs.status == 'continue'
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to GitHub Container Registry
+        if: steps.changed.outputs.status == 'continue'
+        uses: docker/login-action@v1 
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        if: steps.changed.outputs.status == 'continue'
+        uses: docker/build-push-action@v2
+        with:
+          context: ./${{ matrix.IMAGE_NAME }}/
+          platforms: linux/amd64
+          push: true
+          # tag /w a branch if it's a thing?
+          tags: ghcr.io/${{ github.repository_owner }}/${{ matrix.IMAGE_NAME }}:latest
