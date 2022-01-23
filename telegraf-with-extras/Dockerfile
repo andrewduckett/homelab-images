@@ -1,3 +1,4 @@
+# build the geoip plugin
 FROM golang:1.17 as geoip
 
 WORKDIR /go/src/app
@@ -5,6 +6,7 @@ WORKDIR /go/src/app
 RUN git clone https://github.com/a-bali/telegraf-geoip.git . && \
     go build -o geoip cmd/main.go
 
+# build the plex plugin
 FROM golang:1.17 AS plex-webhooks
 
 WORKDIR /go/src/app
