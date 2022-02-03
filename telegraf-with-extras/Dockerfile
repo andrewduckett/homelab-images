@@ -22,7 +22,7 @@ COPY --from=plex-webhooks --chown=telegraf:telegraf /go/src/app/bin/webhook-plex
 # Maybe add this later: https://github.com/weldpua2008/docker-net-snmp
 RUN apt update && \
     # Add smartctl
-    apt install -y --no-install-recommends smartmontools lm-sensors && \
+    apt install -y --no-install-recommends smartmontools lm-sensors nvme-cli && \
     \
     # clean up
     rm -rf /var/lib/apt/lists/*
