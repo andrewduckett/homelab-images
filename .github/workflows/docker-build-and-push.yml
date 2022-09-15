@@ -13,7 +13,8 @@ jobs:
       matrix:
         IMAGE_NAME:
           [
-            "telegraf-with-extras"
+            "telegraf-with-extras",
+            "neolink-debian"
           ]
 
     steps:
